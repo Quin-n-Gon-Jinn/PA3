@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Interactiva</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Tienda Interactiva</h1>
+  </header>
+
+  <main>
+    <section id="productos">
+      <h2>Productos</h2>
+      <!-- Los productos se insertarán dinámicamente con JavaScript -->
+    </section>
+
+    <section id="carrito">
+      <h2>Carrito de Compras</h2>
+      <p id="mensaje-vacio">El carrito está vacío.</p>
+      <ul id="lista-carrito"></ul>
+      <p class="total">Total: <span id="total">S/ 0.00</span></p>
+      <button id="vaciar-carrito">Vaciar Carrito</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Quinn~ - Proyecto de Comercio Electrónico</p>
+  </footer>
+
+  <script>
+    const productos = [
+      { nombre: "Laptop Gamer", precio: 3200.00, imagen: "img/laptop.jpg" },
+      { nombre: "Mouse Inalámbrico", precio: 120.00, imagen: "img/mouse.jpg" },
+      { nombre: "Teclado Mecánico", precio: 300.00, imagen: "img/teclado.jpg" },
+      { nombre: "Monitor 24\"", precio: 750.00, imagen: "img/monitor.jpg" }
+    ];
+
+    const productosContainer = document.getElementById("productos");
+    const carritoLista = document.getElementById("lista-carrito");
+    const totalElemento = document.getElementById("total");
+    const vaciarBtn = document.getElementById("vaciar-carrito");
+
+    let carrito = [];
+
+    function renderProductos() {
+      productos.forEach((producto, index) => {
+        const card = document.createElement("div");
+        card.className = "producto";
+
+        const img = document.createElement("img");
+        img.src = producto.imagen;
+        img.alt = producto.nombre;
+
+        const nombre = document.createElement("h3");
+        nombre.textContent = producto.nombre;
+
+        const precio = document.createElement("p");
+        precio.textContent = `Precio: S/ ${producto.precio.toFixed(2)}`;
+
+        const boton = document.createElement("button");
+        boton.textContent = "Agregar";
+        boton.onclick = () => agregarAlCarrito(index);
+
+        card.appendChild(img);
+        card.appendChild(nombre);
+        card.appendChild(precio);
+        card.appendChild(boton);
+        productosContainer.appendChild(card);
+      });
+    }
+
+    function agregarAlCarrito(index) {
+      carrito.push(productos[index]);
+      renderCarrito();
+    }
+
+    function renderCarrito() {
+      carritoLista.innerHTML = "";
+      let total = 0;
+      const mensajeVacio = document.getElementById("mensaje-vacio");
+
+      if (carrito.length === 0) {
+        mensajeVacio.style.display = "block";
+      } else {
+        mensajeVacio.style.display = "none";
+        carrito.forEach(producto => {
+          const li = document.createElement("li");
+          li.textContent = `${producto.nombre} - S/ ${producto.precio.toFixed(2)}`;
+          carritoLista.appendChild(li);
+          total += producto.precio;
+        });
+      }
+
+      totalElemento.textContent = `S/ ${total.toFixed(2)}`;
+    }
+
+    vaciarBtn.onclick = () => {
+      carrito = [];
+      renderCarrito();
+    };
+
+    renderProductos();
+    renderCarrito();
+  </script>
+</body>
+</html>
